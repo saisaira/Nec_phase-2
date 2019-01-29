@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>form</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="main">
+      <!-- career objective -->
+      <div class="sub">
+      <h1>Career Objective</h1>
+       <select id="career" name="career">
+         <option>select your career objective</option>
+         <option>To build a long-term career in [specific industry] with opportunities for career growth.</option>
+         <option>To enhance my educational and professional skills in a stable and dynamic workplace.</option>
+       </select>
+      </div>
+      <!-- personal information -->
+      <div class="sub1">
+        <h1>Personal Information</h1>
+        <input type="text" name="name" id="name" placeholder="enter name">
+        <input type="number" name="phone" id="phone" placeholder="mobile number">
+        <input type="email" name="email" id="email" placeholder="enter email">
+      </div>
+      <!-- pg details -->
+      <div class="sub1">
+        <h1>PG details</h1>
+      <label for="pg">
+        <select id="pg" name="pg">
+          <option>Select</option>
+          <option>MCA</option>
+          <option>M.Tech</option>
+        </select>
+      </label><br>
+
+      <label for="pginst">
+        <input type="text" name="pginst" id="pginst" placeholder="enter college name">
+      </label>
+      <label for="pgper">
+        <input type="text" name="pgper" id="pgper" placeholder="enter percentage">
+      </label>
+      <label for="pgyear">
+        <input type="text" name="pgyear" id="pgyear" placeholder="year of passing">
+      </label>
+      </div>
+<!-- degree details -->
+<div class="sub1">
+  <h1>Degree details</h1>
+<label for="degree">
+  <select id="degree" name="degree">
+    <option>Select</option>
+    <option>Bsc</option>
+    <option>B.Tech</option>
+    <option>B.Arch</option>
+  </select>
+</label><br>
+
+<label for="dinst">
+  <input type="text" name="dinst" id="dinst" placeholder="enter college name">
+</label>
+<label for="dpercen">
+  <input type="text" name="dpercen" id="dpercen" placeholder="enter percentage">
+</label>
+<label for="dyear">
+  <input type="text" name="dyear" id="dyear" placeholder="year of passing">
+</label>
+</div>
+<!-- intermediate  -->
+<div class="sub1">
+  <h1>Intermediate details</h1>
+<label for="inter">
+  <select id="inter" name="inter">
+    <option>Select</option>
+    <option>MPC</option>
+    <option>BIPC</option>
+    <option>CEC</option>
+  </select>
+</label><br>
+
+<label for="ininst">
+  <input type="text" name="ininst" id="ininst" placeholder="enter college name">
+</label>
+<label for="inpercen">
+  <input type="text" name="inpercen" id="inpercen" placeholder="enter percentage">
+</label>
+<label for="inyear">
+  <input type="text" name="inyear" id="inyear" placeholder="year of passing">
+</label>
+</div>
+<!-- SSC -->
+<div class="sub1">
+  <h1>SSC details</h1>
+<label for="ssc">
+  <select id="ssc" name="ssc">
+    <option>Select</option>
+    <option>SSC</option>
+    <option>CBSE</option>
+  </select>
+</label><br>
+
+<label for="sinst">
+  <input type="text" name="sinst" id="sinst" placeholder="enter college name">
+</label>
+<label for="spercen">
+  <input type="text" name="spercen" id="spercen" placeholder="enter percentage">
+</label>
+<label for="syear">
+  <input type="text" name="syear" id="syear" placeholder="year of passing">
+</label>
+</div>
+</div>
+<button type="button" name="button" onclick="submitdata()">Submit</button>
+  </body>
+</html>
+
+<!-- javascript -->
+<script type="text/javascript">
+  function submitdata(){
+    var career=document.getElementById("career").value;
+    var name;
+    var phone;
+    var email;
+    name=document.getElementById("name").value;
+    phone=document.getElementById("phone").value;
+    email=document.getElementById("email").value;
+
+    var pg=document.getElementById("pg").value;
+    var pginst=document.getElementById("pginst").value;
+    var pgper=document.getElementById("pgper").value;
+    var pgyear=document.getElementById("pgyear").value;
+
+    var degree=document.getElementById("degree").value;
+    var dinst=document.getElementById("dinst").value;
+    var dpercen=document.getElementById("dpercen").value;
+    var dyear=document.getElementById("dyear").value;
+
+    var inter=document.getElementById("inter").value;
+    var ininst=document.getElementById("ininst").value;
+    var inpercen=document.getElementById("inpercen").value;
+    var inyear=document.getElementById("inyear").value;
+
+    var ssc=document.getElementById("ssc").value;
+    var sinst=document.getElementById("sinst").value;
+    var spercen=document.getElementById("spercen").value;
+    var syear=document.getElementById("syear").value;
+
+    var request;
+    var result;
+    var tx;
+    var store;
+    var indexedDB = window.indexedDB || window.webkitIndexedDB ||
+    window.msIndexedDB || window.mozIndexedDB ;
+    request = indexedDB.open("mydb",1);
+    request.onerror=function(e){
+      console.log("error"+e)
+    }
+    request.onupgradeneeded = function(e){
+      result = e.target.result;
+      store = result.createObjectStore("resume", {keyPath:"name"});
+    }
+    request.onsuccess = function(e){
+      result = e.target.result;
+      tx = result.transaction("resume",'readwrite');
+      store = tx.objectStore("resume");
+      store.put({
+        career:career,
+        name:name,
+        email:email,
+        phonenum:phone,
+        education:[
+        {
+          degree:pg,
+          inst:pginst,
+          per:pgper,
+          year:pgyear
+        },
+        {
+          degree:degree,
+          inst:dinst,
+          per:dpercen,
+          year:dyear
+        },
+        {
+          degree:inter,
+          inst:ininst,
+          per:inpercen,
+          year:inyear
+        },
+        {
+          degree:ssc,
+          inst:sinst,
+          per:spercen,
+          year:syear
+        }
+        ]
+      });
+      window.open("index.html")
+    }
+  }
+</script>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Resume</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="main1">
+
+      <div class="left">
+
+      </div>
+      <div class="right">
+
+      </div>
+
+    </div>
+
+  </body>
+</html>
+<script type="text/javascript">
+  var userdata=window.location.search.substring(1).split("&");
+  for(i=0; i<userdata.length;i++){
+    var d=userdata[i].split("=");
+    console.log(d);
+  }
+  console.log(d[1]);
+// indexed db
+  var request;
+  var result;
+  var tx;
+  var store;
+
+  var indexedDB = window.indexedDB || window.webkitIndexedDB || window.msIndexedDB || window.mozIndexedDB ;
+  request = indexedDB.open("mydb",1);
+  request.onerror= function(e) {
+    console.log("error"+e);
+  }
+  request.onupgradeneeded = function(e) {
+    result = e.target.result;
+    store= result.createObjectStore("resume", {keyPath:"name"});
+  }
+
+  request.onsuccess = function(e) {
+    result= e.target.result;
+    tx = result.transaction("resume",'readwrite');
+    store= tx.objectStore("resume");
+
+    var info=store.get(d[1]);
+    info.onsuccess= function(e) {
+      var finalresult = e.target.result;
+      console.log(finalresult);
+         personaldata(finalresult);
+         education(finalresult.education);
+    }
+  }
+  var left=document.querySelector(".left");
+  var right=document.querySelector(".right");
+
+  function personaldata(pd){
+    var img=document.createElement("img");
+    img.src="images.png";
+    img.alt=pd.name;
+    left.append(img);
+
+    var name=document.createElement("h2");
+    name.textContent=pd.name;
+    left.append(name);
+
+    var email=document.createElement("p");
+    email.textContent=pd.email;
+    left.append(email);
+
+    var p=document.createElement("p");
+    p.textContent=pd.phonenum;
+    left.append(p)
+
+    var carrer= document.createElement("h2");
+    carrer.textContent = "Carrier Objective";
+    right.append(carrer);
+    right.append(document.createElement("HR"));
+    var c = document.createElement("p");
+    c.textContent = pd.career;
+    right.append(c);
+  }
+  function education(edu) {
+    var h2=document.createElement("h2");
+    h2.textContent="Education Details";
+    right.append(h2);
+    right.append(document.createElement("HR"));
+
+    var ul=document.createElement("ul");
+    right.append(ul);
+    for(var i in edu){
+      var li=document.createElement("li");
+      li.textContent=edu[i].degree;
+      ul.append(li);
+      var inst=document.createElement("p");
+      inst.textContent=edu[i].inst;
+      ul.append(inst);
+      var per=document.createElement("p");
+      per.textContent=edu[i].per;
+      ul.append(per);
+      var year=document.createElement("p");
+      year.textContent=edu[i].year;
+      ul.append(year);
+    }
+  }
+
+</script>
